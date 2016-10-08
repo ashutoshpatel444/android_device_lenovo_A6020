@@ -195,7 +195,7 @@ static void power_hint(__attribute__((unused)) struct power_module *module,
 }
 
 static struct hw_module_methods_t power_module_methods = {
-    .open = NULL,
+    .open = A6020_power_open,
 };
 
 static int get_feature(__attribute__((unused)) struct power_module *module,
@@ -207,13 +207,49 @@ static int get_feature(__attribute__((unused)) struct power_module *module,
     return -1;
 }
 
+static int A6020_power_open(const hw_module_t* module, const char* name,
+                    hw_device_t** device)
+{
+    ALOGD("%s: enter; name=%s", __FUNCTION__, name);
+    int retval = 0; /* 0 is ok; -1 is error */
+
+    if (strcmp(name, POWER_HARDWARE_MODULE_ID) == 0) {
+        power_module_t *dev = (power_module_t *)calloc(1,
+                sizeof(power_module_t));
+
+        if (dev) {
+            /* Common hw_device_t fields */
+            dev->common.tag = HARDWARE_DEVICE_TAG;
+            dev->common.module_api_version = POWER_MODULE_API_VERSION_0_3;
+            dev->common.hal_api_version = HARDWARE_HAL_API_VERSION;
+
+            dev->init = power_init;
+            dev->powerHint = power_hint;
+            dev->setInteractive = set_interactive;
+            dev->setFeature = set_feature;
+            dev->getFeature = get_feature;
+            dev->get_number_of_platform_modes = NULL;
+            dev->get_platform_low_power_stats = NULL;
+            dev->get_voter_list = NULL;
+
+            *device = (hw_device_t*)dev;
+        } else
+            retval = -ENOMEM;
+    } else {
+        retval = -EINVAL;
+    }
+
+    ALOGD("%s: exit %d", __FUNCTION__, retval);
+    return retval;
+}
+
 struct power_module HAL_MODULE_INFO_SYM = {
     .common = {
         .tag = HARDWARE_MODULE_TAG,
-        .module_api_version = POWER_MODULE_API_VERSION_0_2,
+        .module_api_version = POWER_MODULE_API_VERSION_0_3,
         .hal_api_version = HARDWARE_HAL_API_VERSION,
         .id = POWER_HARDWARE_MODULE_ID,
-        .name = "Lenovo A6000 (msm8916) Power HAL",
+        .name = "Lenovo A6020 Power HAL",
         .author = "Harshit Jain <harshitjain6751@gmail.com>",
         .methods = &power_module_methods,
     },
