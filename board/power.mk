@@ -1,2 +1,2 @@
-# Power
-TARGET_POWERHAL_VARIANT := qcom
+# Lenovo PowerHaL
+TARGET_POWERHAL_VARIANT := lenovo
