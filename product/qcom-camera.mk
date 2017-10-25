@@ -6,9 +6,10 @@ PRODUCT_PACKAGES += \
     libbson \
     libshim_gui \
     libshim_atomic \
-    SnapdragonCamera
+    Snap \
 #   libboringssl-compat \
 
+# libboringssl-compat
 
 # Stlport
 #PRODUCT_PACKAGES += \
