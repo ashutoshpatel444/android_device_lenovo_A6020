@@ -15,7 +15,7 @@
 $(call inherit-product, device/lenovo/A6020/full_A6020.mk)
 
 # Inherit some common LineageOS stuff.
-$(call inherit-product-if-exists, vendor/dot/common.mk)
+$(call inherit-product-if-exists, vendor/carbon/config/common.mk)
 
 # Boot animation
 TARGET_SCREEN_WIDTH := 1080
@@ -23,4 +23,4 @@ TARGET_SCREEN_HEIGHT := 1920
 
 ## Device identifier. This must come after all inclusions
 PRODUCT_DEVICE := A6020
-PRODUCT_NAME := dot_A6020
+PRODUCT_NAME := carbon_A6020
